@@ -4,8 +4,21 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
 import { useRouter } from 'next/router'
 
 type Data = {
-    author: string
-    content: string
+    GEN: string
+    BEZ: string
+    death_rate: number
+    cases: number
+    deaths: number
+    cases_per_100k: number
+    cases_per_population: number
+    BL: string
+    BL_ID: string
+    county: string
+    last_update: string
+    cases7_per_100k: number
+    recovered: number | null
+    EWZ_BL: number
+    cases7_bl_per_100k: number
 }
 
 const Container = styled.div<{ inzidenz: number }>`
@@ -16,7 +29,7 @@ const Container = styled.div<{ inzidenz: number }>`
 `
 
 const Title = styled.h1`
-    color: red;
+    color: ${({ theme }) => theme.colors.primary};
     font-size: 50px;
 `
 
@@ -33,73 +46,6 @@ const sortAlphabetically = (list: { name: string }[]): { name: string }[] => {
         }
         return 0
     })
-}
-
-const City: React.FunctionComponent = ({
-    data,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
-    const router = useRouter()
-    const [listOfCities, setListOfCities] = React.useState<{ name: string }[]>(
-        []
-    )
-    const [selectedCity, setSelectedCity] = React.useState(
-        tidyUpName(data.GEN, data.BEZ)
-    )
-
-    React.useEffect(() => {
-        fetch(
-            'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=GEN,BEZ&outSR=4326&f=json'
-        )
-            .then((res) => res.json())
-            .then(
-                (res: {
-                    features: { attributes: { GEN: string; BEZ: string } }[]
-                }) => {
-                    setListOfCities(
-                        sortAlphabetically(
-                            res.features.map((el) =>
-                                tidyUpName(el.attributes.GEN, el.attributes.BEZ)
-                            )
-                        )
-                    )
-                }
-            )
-            .then(() => console.log(listOfCities))
-    }, [])
-
-    console.log(data.cases7_per_100k)
-    console.log(
-        data.cases7_per_100k < 20
-            ? 'green'
-            : data.cases7_per_100k < 50
-            ? 'yellow'
-            : 'red'
-    )
-
-    return (
-        <>
-            <Container inzidenz={data.cases7_per_100k}>
-                <Title>{data.GEN}</Title>
-                {listOfCities.length && (
-                    <select
-                        value={selectedCity}
-                        onChange={(event) => {
-                            console.log(event.target.value)
-                            setSelectedCity(event.target.value)
-                            router.push(
-                                `/${event.target.value.toLocaleLowerCase()}`
-                            )
-                        }}
-                    >
-                        {listOfCities.map((el) => (
-                            <option value={el}>{el}</option>
-                        ))}
-                    </select>
-                )}
-                <div>{JSON.stringify(data)}</div>
-            </Container>
-        </>
-    )
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -157,6 +103,74 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
         })
 
     return { props: { data } }
+}
+
+const City = ({ data }: InferGetStaticPropsType<typeof getStaticProps>) => {
+    const router = useRouter()
+    const [listOfCities, setListOfCities] = React.useState<{ name: string }[]>(
+        []
+    )
+    const [selectedCity, setSelectedCity] = React.useState(
+        tidyUpName(data.GEN, data.BEZ)
+    )
+
+    React.useEffect(() => {
+        fetch(
+            'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=GEN,BEZ&outSR=4326&f=json'
+        )
+            .then((res) => res.json())
+            .then(
+                (res: {
+                    features: { attributes: { GEN: string; BEZ: string } }[]
+                }) => {
+                    setListOfCities(
+                        sortAlphabetically(
+                            res.features.map((el) => ({
+                                name: tidyUpName(
+                                    el.attributes.GEN,
+                                    el.attributes.BEZ
+                                ),
+                            }))
+                        )
+                    )
+                }
+            )
+            .then(() => console.log(listOfCities))
+    }, [])
+
+    console.log(data.cases7_per_100k)
+    console.log(
+        data.cases7_per_100k < 20
+            ? 'green'
+            : data.cases7_per_100k < 50
+            ? 'yellow'
+            : 'red'
+    )
+
+    return (
+        <>
+            <Container inzidenz={data.cases7_per_100k}>
+                <Title>{data.GEN}</Title>
+                {listOfCities.length && (
+                    <select
+                        value={selectedCity}
+                        onChange={(event) => {
+                            console.log(event.target.value)
+                            setSelectedCity(event.target.value)
+                            router.push(
+                                `/${event.target.value.toLocaleLowerCase()}`
+                            )
+                        }}
+                    >
+                        {listOfCities.map(({ name }) => (
+                            <option value={name}>{name}</option>
+                        ))}
+                    </select>
+                )}
+                <div>{JSON.stringify(data)}</div>
+            </Container>
+        </>
+    )
 }
 
 export default City
