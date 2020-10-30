@@ -46,7 +46,7 @@ const THRESHOLD = [
 
 const determineInfectionLevel = (value: number) => {
     const findLevel = THRESHOLD.map((el) =>
-        value > el.from && value <= el.to ? 1 : 0
+        value >= el.from && value <= el.to ? 1 : 0
     )
     return THRESHOLD[findLevel.indexOf(1)].emoji
 }
