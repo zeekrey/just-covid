@@ -21,15 +21,71 @@ type RKIData = {
     cases7_bl_per_100k: number
 }
 
+const THRESHOLD = [
+    {
+        from: 0,
+        to: 15,
+        emoji: '🕺',
+    },
+    {
+        from: 16,
+        to: 35,
+        emoji: '😷',
+    },
+    {
+        from: 36,
+        to: 50,
+        emoji: '🤒',
+    },
+    {
+        from: 51,
+        to: 99999,
+        emoji: '🧟‍♀️',
+    },
+]
+
+const determineInfectionLevel = (value: number) => {
+    const findLevel = THRESHOLD.map((el) =>
+        value > el.from && value <= el.to ? 1 : 0
+    )
+    return THRESHOLD[findLevel.indexOf(1)].emoji
+}
+
 const Container = styled.div<{ inzidenz: number }>`
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
+    height: 100%;
     background: ${({ inzidenz }) =>
         inzidenz < 20
             ? 'linear-gradient(90deg, #DCE35B 0%, #45B649 100%)'
             : inzidenz < 50
             ? 'linear-gradient(90deg, #F09819 0%, #EDDE5D 100%)'
             : 'linear-gradient(90deg, #D31027 0%, #EA384D 100%)'};
+
+    h1 {
+        font-size: 4rem;
+        color: white;
+        text-align: center;
+        padding-top: 10%;
+        margin: 0;
+        text-transform: uppercase;
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 700;
+    }
+
+    small {
+        display: block;
+        text-align: center;
+        color: white;
+    }
+`
+
+const Hint = styled.p`
+    color: white;
+    padding: 0 10%;
+    margin-top: 15%;
+    font-size: 1.5rem;
 `
 
 const blobKeyframes = keyframes`
@@ -71,6 +127,7 @@ const BigBlob = styled.div`
 
     small {
         font-size: 1rem;
+        color: black;
     }
 
     h2 {
@@ -134,6 +191,24 @@ const Select = styled.select`
     option {
         font-size: 1rem;
         color: black;
+    }
+`
+
+const Button = styled.button`
+    padding: 1.4rem 6.5rem;
+    border: 2px solid #ffffff;
+    box-sizing: border-box;
+    border-radius: 8px;
+    color: white;
+    background: none;
+    text-transform: uppercase;
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.5rem;
+    cursor: pointer;
+    &:focus {
+        outline: none;
     }
 `
 
@@ -228,12 +303,12 @@ const City = ({ data }: { data: RKIData }) => {
     )
 
     const {
-        // cases,
-        // cases_per_100k,
-        // cases_per_population,
+        cases,
+        cases_per_100k,
+        cases_per_population,
         cases7_per_100k,
-        // cases7_bl_per_100k,
-        // last_update,
+        cases7_bl_per_100k,
+        last_update,
     } = data
 
     React.useEffect(() => {
@@ -272,31 +347,37 @@ const City = ({ data }: { data: RKIData }) => {
     return (
         <>
             <Container inzidenz={data.cases7_per_100k}>
-                <SelectContainer>
-                    {listOfCities.length && (
-                        <Select
-                            value={selectedCity}
-                            onChange={(event) => {
-                                console.log(event.target.value)
-                                setSelectedCity(event.target.value)
-                                router.push(
-                                    `/${event.target.value.toLocaleLowerCase()}`
-                                )
-                            }}
-                        >
-                            {listOfCities.map(({ name }) => (
-                                <option value={name}>{name}</option>
-                            ))}
-                        </Select>
-                    )}
-                </SelectContainer>
+                <h1>{tidyUpName(data.GEN, data.BEZ)}</h1>
+                <small>Vom: {last_update}</small>
                 <Stage>
                     <BigBlob>
                         <small>7 Tage Inzidenz</small>
                         <h2>{Math.round(cases7_per_100k)}</h2>
                     </BigBlob>
-                    <SmallBlob>🧟‍♀️</SmallBlob>
+                    <SmallBlob>
+                        {determineInfectionLevel(cases7_per_100k)}
+                    </SmallBlob>
                 </Stage>
+                <Hint>
+                    In {tidyUpName(data.GEN, data.BEZ)} haben sich bisher{' '}
+                    <strong>{cases} </strong>Menschen infiziert. Das sind{' '}
+                    <strong>{cases_per_population}</strong> der
+                    Gesamtbevölkerung in {tidyUpName(data.GEN, data.BEZ)}. Im
+                    vergleich mit dem Bundesland hat Leipzig{' '}
+                    <strong>{Math.round(cases_per_100k)}</strong> Fälle pro
+                    100.000 Einwohner, wobei das Bundesland{' '}
+                    <strong>{Math.round(cases7_bl_per_100k)}</strong> Fälle pro
+                    100.000 Einwohner hat.
+                </Hint>
+                <div
+                    style={{
+                        display: 'flex',
+                        placeContent: 'center',
+                        margin: '10%',
+                    }}
+                >
+                    <Button>Teilen</Button>
+                </div>
             </Container>
         </>
     )
