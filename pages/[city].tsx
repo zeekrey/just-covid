@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
 
 type RKIData = {
     GEN: string
@@ -167,33 +167,6 @@ const Stage = styled.main`
     position: relative;
 `
 
-const SelectContainer = styled.div`
-    padding: 8% 10%;
-`
-
-const Select = styled.select`
-    cursor: pointer;
-    width: 100%;
-    appearance: none;
-    border: none;
-    outline: none;
-    background-color: inherit;
-    border: none;
-    color: white;
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 700;
-    font-display: auto;
-    padding: 1rem 2rem;
-    margin: 0;
-    text-align: center;
-    font-size: 4rem;
-    option {
-        font-size: 1rem;
-        color: black;
-    }
-`
-
 const Button = styled.button`
     padding: 1.4rem 6.5rem;
     border: 2px solid #ffffff;
@@ -215,17 +188,17 @@ const Button = styled.button`
 const tidyUpName = (name: string, kind: string): string =>
     kind === 'Landkreis' ? `${name} (Landkreis)` : name
 
-const sortAlphabetically = (list: { name: string }[]): { name: string }[] => {
-    return list.sort((a, b) => {
-        if (a.name < b.name) {
-            return -1
-        }
-        if (a.name > b.name) {
-            return 1
-        }
-        return 0
-    })
-}
+// const sortAlphabetically = (list: { name: string }[]): { name: string }[] => {
+//     return list.sort((a, b) => {
+//         if (a.name < b.name) {
+//             return -1
+//         }
+//         if (a.name > b.name) {
+//             return 1
+//         }
+//         return 0
+//     })
+// }
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const cities = await fetch(
@@ -294,13 +267,10 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
  */
 
 const City = ({ data }: { data: RKIData }) => {
-    const router = useRouter()
-    const [listOfCities, setListOfCities] = React.useState<{ name: string }[]>(
-        []
-    )
-    const [selectedCity, setSelectedCity] = React.useState(
-        tidyUpName(data.GEN, data.BEZ)
-    )
+    // const [listOfCities, setListOfCities] = React.useState<{ name: string }[]>(
+    //     []
+    // )
+    
 
     const {
         cases,
@@ -311,38 +281,38 @@ const City = ({ data }: { data: RKIData }) => {
         last_update,
     } = data
 
-    React.useEffect(() => {
-        fetch(
-            'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=GEN,BEZ&outSR=4326&f=json'
-        )
-            .then((res) => res.json())
-            .then(
-                (res: {
-                    features: { attributes: { GEN: string; BEZ: string } }[]
-                }) => {
-                    setListOfCities(
-                        sortAlphabetically(
-                            res.features.map((el) => ({
-                                name: tidyUpName(
-                                    el.attributes.GEN,
-                                    el.attributes.BEZ
-                                ),
-                            }))
-                        )
-                    )
-                }
-            )
-            .then(() => console.log(listOfCities))
-    }, [])
+    // React.useEffect(() => {
+    //     fetch(
+    //         'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=GEN,BEZ&outSR=4326&f=json'
+    //     )
+    //         .then((res) => res.json())
+    //         .then(
+    //             (res: {
+    //                 features: { attributes: { GEN: string; BEZ: string } }[]
+    //             }) => {
+    //                 setListOfCities(
+    //                     sortAlphabetically(
+    //                         res.features.map((el) => ({
+    //                             name: tidyUpName(
+    //                                 el.attributes.GEN,
+    //                                 el.attributes.BEZ
+    //                             ),
+    //                         }))
+    //                     )
+    //                 )
+    //             }
+    //         )
+    //         .then(() => console.log(listOfCities))
+    // }, [])
 
-    console.log(data.cases7_per_100k)
-    console.log(
-        data.cases7_per_100k < 20
-            ? 'green'
-            : data.cases7_per_100k < 50
-            ? 'yellow'
-            : 'red'
-    )
+    // console.log(data.cases7_per_100k)
+    // console.log(
+    //     data.cases7_per_100k < 20
+    //         ? 'green'
+    //         : data.cases7_per_100k < 50
+    //         ? 'yellow'
+    //         : 'red'
+    // )
 
     return (
         <>
