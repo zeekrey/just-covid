@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { keyframes } from 'styled-components'
 import { GetStaticPaths, GetStaticProps } from 'next'
 // import { useRouter } from 'next/router'
+import GithubCorner from 'react-github-corner'
 
 type RKIData = {
     GEN: string
@@ -105,6 +106,17 @@ const blobKeyframes = keyframes`
       } 
   `
 
+const Wave = styled.div`
+    width: 100vw;
+    margin-top: -12%;
+`
+
+const Boxes = styled.div`
+    display: flex;
+    margin-bottom: 4rem;
+    padding: 0 2rem;
+`
+
 const BigBlob = styled.div`
     background: white;
     animation: ${blobKeyframes} 8s ease-in-out infinite;
@@ -182,6 +194,25 @@ const Button = styled.button`
     cursor: pointer;
     &:focus {
         outline: none;
+    }
+`
+
+const Box = styled.div`
+    padding: 1rem;
+    flex: 1;
+    text-align: center;
+
+    div {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+    }
+
+    p {
+        letter-spacing: 0.05rem;
+        line-height: 1.4rem;
     }
 `
 
@@ -270,7 +301,6 @@ const City = ({ data }: { data: RKIData }) => {
     // const [listOfCities, setListOfCities] = React.useState<{ name: string }[]>(
     //     []
     // )
-    
 
     const {
         cases,
@@ -316,6 +346,11 @@ const City = ({ data }: { data: RKIData }) => {
 
     return (
         <>
+            <GithubCorner
+                href="https://github.com/zeekrey/just-covid"
+                octoColor="#c42a3c"
+                bannerColor="white"
+            />
             <Container inzidenz={data.cases7_per_100k}>
                 <h1>{tidyUpName(data.GEN, data.BEZ)}</h1>
                 <small>Vom: {last_update}</small>
@@ -349,6 +384,61 @@ const City = ({ data }: { data: RKIData }) => {
                     <Button>Teilen</Button>
                 </div>
             </Container>
+            <Wave>
+                <svg
+                    viewBox="0 0 768 163"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M0 47.0669L43 59.0669C85 70.0669 171 93.0669 256 78.0669C341 62.0669 427 9.06687 512 1.06687C597 -6.93313 683 32.0669 725 51.0669L768 70.0669V162.067H725C683 162.067 597 162.067 512 162.067C427 162.067 341 162.067 256 162.067C171 162.067 85 162.067 43 162.067H0V47.0669Z"
+                        fill="white"
+                    />
+                </svg>
+            </Wave>
+            <Boxes>
+                <Box>
+                    <div>🔍</div>
+                    <h3>Quelle</h3>
+                    <p>
+                        Die Daten stammem vom Robert Koch-Institut (RKI),
+                        dl-de/by-2-0 vom <strong>{last_update}</strong>. Die
+                        konkrete Quelle kann{' '}
+                        <a href="https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0">
+                            hier
+                        </a>{' '}
+                        eingesehen werden.
+                    </p>
+                </Box>
+                <Box>
+                    <div>❓</div>
+                    <h3>Wie?</h3>
+                    <p>
+                        Dies ist ein kleines Projekt für alle die, die sich
+                        weniger 📈 und mehr 🥳 zur Beschreibung der aktuelle
+                        Lage wünschen. Eine gute Beschreibung der
+                        7-Tage-Inzidenz findet ihr{' '}
+                        <a href="https://www.zdf.de/nachrichten/panorama/coronavirus-covid19-glossar-100.html">
+                            hier
+                        </a>{' '}
+                        .
+                    </p>
+                </Box>
+                <Box>
+                    <div>👋</div>
+                    <h3>Hey!</h3>
+                    <p>Fragen oder Feedback gerne via Twitter.</p>
+                </Box>
+            </Boxes>
+            <hr />
+            <div style={{ textAlign: 'center', padding: '4rem' }}>
+                <div>🧾</div>
+                <h4>Impressum</h4>
+                <strong>Christian Krey</strong>
+                <p>covid@krey.io</p>
+            </div>
         </>
     )
 }
