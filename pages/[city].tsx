@@ -28,17 +28,17 @@ const THRESHOLD = [
         emoji: '🕺',
     },
     {
-        from: 16,
+        from: 15,
         to: 35,
         emoji: '😷',
     },
     {
-        from: 36,
+        from: 35,
         to: 50,
         emoji: '🤒',
     },
     {
-        from: 51,
+        from: 50,
         to: 99999,
         emoji: '🧟‍♀️',
     },
@@ -46,7 +46,7 @@ const THRESHOLD = [
 
 const determineInfectionLevel = (value: number) => {
     const findLevel = THRESHOLD.map((el) =>
-        value >= el.from && value <= el.to ? 1 : 0
+        value >= el.from && value < el.to ? 1 : 0
     )
     return THRESHOLD[findLevel.indexOf(1)].emoji
 }
