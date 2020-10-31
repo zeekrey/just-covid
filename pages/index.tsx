@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { GetStaticProps } from 'next'
+import Link from 'next/link'
 import type { RKIData } from '../types/types'
+import { tidyUpName, determineInfectionLevel } from '../lib/util'
 
 const Title = styled.h1`
     color: red;
@@ -51,26 +53,50 @@ export const getStaticProps: GetStaticProps = async () => {
 
 const Grid = styled.div`
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 10px 10px;
+
+    // Medium devices (tablets, 768px and up)
+    @media (min-width: 768px) {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px 10px;
+    }
+
+    // Large devices (desktops, 992px and up)
+    @media (min-width: 992px) {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 10px 10px;
+    }
+
+    // Extra large devices (large desktops, 1200px and up)
+    @media (min-width: 1200px) {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        gap: 10px 10px;
+    }
 `
 
-const CityWrapper = styled.div<{ inzidenz: number }>`
+const CityWrapper = styled.div<{ color: string }>`
     padding: 4rem;
     border-radius: 1rem;
-    background: ${({ inzidenz }) =>
-        inzidenz < 20
-            ? 'linear-gradient(90deg, #DCE35B 0%, #45B649 100%)'
-            : inzidenz < 50
-            ? 'linear-gradient(90deg, #F09819 0%, #EDDE5D 100%)'
-            : 'linear-gradient(90deg, #D31027 0%, #EA384D 100%)'};
+    background: ${(props) => props.color};
 `
 
-const City = ({ city }: { city: { attributes: RKIData } }) => {
+const City = ({ city }: { city: RKIData }) => {
     return (
-        <CityWrapper inzidenz={city.attributes.cases7_per_100k}>
-            {city.attributes.GEN}
-        </CityWrapper>
+        <Link
+            href={encodeURIComponent(
+                tidyUpName(city.GEN, city.BEZ).toLowerCase()
+            )}
+        >
+            <a>
+                <CityWrapper
+                    color={determineInfectionLevel(city.cases7_per_100k).color}
+                >
+                    {city.GEN}
+                    {determineInfectionLevel(city.cases7_per_100k).emoji}
+                </CityWrapper>
+            </a>
+        </Link>
     )
 }
 
@@ -82,7 +108,9 @@ const Home = ({ data }: { data: { attributes: RKIData }[] }) => {
         <>
             <Title>My page</Title>
             <Grid>
-                <City city={data[0]} />
+                {data.map((city) => (
+                    <City city={city.attributes} key={city.attributes.GEN} />
+                ))}
             </Grid>
         </>
     )

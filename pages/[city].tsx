@@ -1,39 +1,9 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
 import { GetStaticPaths, GetStaticProps } from 'next'
-// import { useRouter } from 'next/router'
 import GithubCorner from 'react-github-corner'
 import type { RKIData } from '../types/types'
-
-const THRESHOLD = [
-    {
-        from: 0,
-        to: 15,
-        emoji: '🕺',
-    },
-    {
-        from: 15,
-        to: 35,
-        emoji: '😷',
-    },
-    {
-        from: 35,
-        to: 50,
-        emoji: '🤒',
-    },
-    {
-        from: 50,
-        to: 99999,
-        emoji: '🧟‍♀️',
-    },
-]
-
-const determineInfectionLevel = (value: number) => {
-    const findLevel = THRESHOLD.map((el) =>
-        value >= el.from && value < el.to ? 1 : 0
-    )
-    return THRESHOLD[findLevel.indexOf(1)].emoji
-}
+import { tidyUpName, determineInfectionLevel } from '../lib/util'
 
 const Container = styled.div<{ inzidenz: number }>`
     width: 100vw;
@@ -199,9 +169,6 @@ const Box = styled.div`
     }
 `
 
-const tidyUpName = (name: string, kind: string): string =>
-    kind === 'Landkreis' ? `${name} (Landkreis)` : name
-
 // const sortAlphabetically = (list: { name: string }[]): { name: string }[] => {
 //     return list.sort((a, b) => {
 //         if (a.name < b.name) {
@@ -343,7 +310,7 @@ const City = ({ data }: { data: RKIData }) => {
                         <h2>{Math.round(cases7_per_100k)}</h2>
                     </BigBlob>
                     <SmallBlob>
-                        {determineInfectionLevel(cases7_per_100k)}
+                        {determineInfectionLevel(cases7_per_100k).emoji}
                     </SmallBlob>
                 </Stage>
                 <Hint>
