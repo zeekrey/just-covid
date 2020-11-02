@@ -4,6 +4,8 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import GithubCorner from 'react-github-corner'
 import type { RKIData } from '../types/types'
 import { tidyUpName, determineInfectionLevel } from '../lib/util'
+import { Map } from '../components/Map'
+import { Graph } from '../components/Graph'
 
 const Container = styled.div<{ inzidenz: number }>`
     width: 100vw;
@@ -169,6 +171,42 @@ const Box = styled.div`
     }
 `
 
+const Circle = styled.div`
+    border-radius: 99rem;
+    width: 8rem;
+    height: 8rem;
+    background: #ffffff;
+    box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
+        0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
+        0px 0px 1px rgba(0, 0, 0, 0.04);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > div {
+        font-size: 2.1rem;
+    }
+`
+
+const IndicatorWrapper = styled.div`
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    margin-top: -6rem;
+    width: 100%;
+`
+
+const Indicator: React.FunctionComponent = () => {
+    return (
+        <IndicatorWrapper>
+            <Circle>
+                <div>👩‍🦰</div>
+            </Circle>
+        </IndicatorWrapper>
+    )
+}
+
 // const sortAlphabetically = (list: { name: string }[]): { name: string }[] => {
 //     return list.sort((a, b) => {
 //         if (a.name < b.name) {
@@ -296,13 +334,33 @@ const City = ({ data }: { data: RKIData }) => {
 
     return (
         <>
-            <GithubCorner
+            {/* <GithubCorner
                 href="https://github.com/zeekrey/just-covid"
                 octoColor="#c42a3c"
                 bannerColor="white"
-            />
-            <Container inzidenz={data.cases7_per_100k}>
-                <h1>{tidyUpName(data.GEN, data.BEZ)}</h1>
+            /> */}
+            <div
+                style={{
+                    width: 'calc(100%-2rem)',
+                    padding: '2rem',
+                }}
+            >
+                <Map />
+            </div>
+            <Indicator />
+            <h1
+                style={{
+                    textAlign: 'center',
+                    textTransform: 'uppercase',
+                    margin: '5rem 0',
+                    fontSize: '3rem',
+                }}
+            >
+                {tidyUpName(data.GEN, data.BEZ)}
+            </h1>
+            <Graph />
+            {/* <Container inzidenz={data.cases7_per_100k}>
+                
                 <small>Vom: {last_update}</small>
                 <Stage>
                     <BigBlob>
@@ -388,7 +446,7 @@ const City = ({ data }: { data: RKIData }) => {
                 <h4>Impressum</h4>
                 <strong>Christian Krey</strong>
                 <p>covid@krey.io</p>
-            </div>
+            </div> */}
         </>
     )
 }
