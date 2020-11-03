@@ -10,13 +10,6 @@ const Wrapper = styled.div`
     }
 `
 
-/**
- *  objectfit: 'cover';
-        width: '100%' !important;
-        height: '100%';
-        borderradius: '1rem';
- */
-
 const Map: React.FunctionComponent = () => {
     const staticService = mbxStatic({
         accessToken:

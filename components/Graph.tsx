@@ -1,63 +1,33 @@
 import * as React from 'react'
-import {parse} from 'date-fns'
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-} from 'recharts'
+import { AxisLeft, AxisBottom } from '@vx/axis'
+import { scaleTime, scaleLinear } from '@vx/scale'
+import { extent } from 'd3-array'
 
-const data = [
-    {
-        date: '28.10.2020, 00:00 Uhr',
-        value: 10,
-    },
-    {
-        date: '29.10.2020, 00:00 Uhr',
-        value: 10,
-    },
-    {
-        date: '30.10.2020, 00:00 Uhr',
-        value: 10,
-    },
-    {
-        date: '01.11.2020, 00:00 Uhr',
-        value: 10,
-    },
-    {
-        date: '02.11.2020, 00:00 Uhr',
-        value: 10,
-    },
-]
+// scales
+const timeScale = scaleTime<number>({
+    domain: [
+        Math.min(...cityTemperature.map(date)),
+        Math.max(...cityTemperature.map(date)),
+    ],
+})
+const temperatureScale = scaleLinear<number>({
+    domain: [
+        Math.min(...cityTemperature.map((d) => Math.min(ny(d), sf(d)))),
+        Math.max(...cityTemperature.map((d) => Math.max(ny(d), sf(d)))),
+    ],
+    nice: true,
+})
 
 const Graph: React.FunctionComponent = () => {
     return (
-        <LineChart
-            width={500}
-            height={300}
-            data={data}
-            margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-            }}
-        >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" type="number" domain={['dataMin', 'dataMax']}/>
-            <YAxis />
-            <Tooltip />
-            <Line
-                type="monotone"
-                dataKey="pv"
-                stroke="#8884d8"
-                activeDot={{ r: 8 }}
+        <>
+            <AxisBottom
+                top={yMax}
+                scale={timeScale}
+                numTicks={width > 520 ? 10 : 5}
             />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-        </LineChart>
+            <AxisLeft scale={temperatureScale} />
+        </>
     )
 }
 

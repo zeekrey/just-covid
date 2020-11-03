@@ -40,6 +40,18 @@ const GlobalStyle = createGlobalStyle`
         font-style: normal;
         font-weight: 400;
     }
+
+    h1 {
+        text-align: center;
+        text-transform: uppercase;
+        margin-top: 5rem;
+        margin-bottom: 0.5rem;
+        font-size: 3rem;
+    }
+
+    h2 {
+        margin: 0;
+    }
 `
 
 const theme = {
