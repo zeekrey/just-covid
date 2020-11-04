@@ -1,4 +1,4 @@
-const THRESHOLD = [
+export const THRESHOLD = [
     {
         from: 0,
         to: 15,
@@ -19,7 +19,7 @@ const THRESHOLD = [
     },
     {
         from: 50,
-        to: 99999,
+        to: 999,
         emoji: '🧟‍♀️',
         color: 'linear-gradient(90deg, #D31027 0%, #EA384D 100%)',
     },

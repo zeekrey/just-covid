@@ -44,13 +44,14 @@ const GlobalStyle = createGlobalStyle`
     h1 {
         text-align: center;
         text-transform: uppercase;
-        margin-top: 5rem;
-        margin-bottom: 0.5rem;
         font-size: 3rem;
+        margin: 0;
     }
 
     h2 {
         margin: 0;
+        margin-top: 5rem;
+        margin-bottom: 0.5rem;
     }
 `
 

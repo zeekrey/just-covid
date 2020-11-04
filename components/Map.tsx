@@ -1,16 +1,23 @@
-import Image from 'next/image'
-import mbxStatic from '@mapbox/mapbox-sdk/services/static'
 import styled from 'styled-components'
+import mbxStatic from '@mapbox/mapbox-sdk/services/static'
 
 const Wrapper = styled.div`
     border-radius: 1rem;
     overflow: hidden;
-    & > div {
+    & img {
         width: 100% !important;
     }
 `
 
-const Map: React.FunctionComponent = () => {
+const getMapboxStaticImage = ({
+    width,
+    height,
+    coords = [10, 10],
+}: {
+    width: number
+    height: number
+    coords: [number, number]
+}): string => {
     const staticService = mbxStatic({
         accessToken:
             'pk.eyJ1IjoiemVla3JleSIsImEiOiJja2gwaHViYXQxZHo1MnlyMWdwbjZ3aHIxIn0.iBfBScdw9fEpd_-7-MhtEA',
@@ -19,24 +26,68 @@ const Map: React.FunctionComponent = () => {
     const request = staticService.getStaticImage({
         ownerId: 'mapbox',
         styleId: 'streets-v11',
-        width: 800,
-        height: 500,
+        width: width,
+        height: height,
         position: {
-            coordinates: [12, 13],
-            zoom: 4,
+            coordinates: coords,
+            zoom: 11,
         },
     })
-    const staticImageUrl = request.url()
-    // Now you can open staticImageUrl in a browser.
+    return request.url()
+}
+
+const Map: React.FunctionComponent<{ coords: [number, number] }> = ({
+    coords,
+}) => {
     return (
         <Wrapper>
-            <Image
-                src={staticImageUrl}
-                width={800}
-                height={500}
-                alt="mapbox"
-                loading="eager"
-            />
+            <picture>
+                {/* Small devices (landscape phones, 576px and up) */}
+                <source
+                    media="(max-width: 576px)"
+                    srcSet={getMapboxStaticImage({
+                        coords: coords,
+                        width: 400,
+                        height: 350,
+                    })}
+                />
+                {/* Extra large devices (large desktops, 1200px and up) */}
+                <source
+                    media="(min-width: 1200px)"
+                    srcSet={getMapboxStaticImage({
+                        coords: coords,
+                        width: 1280,
+                        height: 380,
+                    })}
+                />
+                {/* Large devices (desktops, 992px and up) */}
+                <source
+                    media="(min-width: 992px)"
+                    srcSet={getMapboxStaticImage({
+                        coords: coords,
+                        width: 400,
+                        height: 150,
+                    })}
+                />
+                {/* Medium devices (tablets, 768px and up) */}
+                <source
+                    media="(min-width: 577px)"
+                    srcSet={getMapboxStaticImage({
+                        coords: coords,
+                        width: 400,
+                        height: 225,
+                    })}
+                />
+                {/* default */}
+                <img
+                    src={getMapboxStaticImage({
+                        coords: coords,
+                        width: 1280,
+                        height: 432,
+                    })}
+                    alt="City Map"
+                />
+            </picture>
         </Wrapper>
     )
 }

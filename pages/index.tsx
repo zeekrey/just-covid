@@ -14,41 +14,29 @@ export const getStaticProps: GetStaticProps = async () => {
     /**
      * Fetch data from all cities.
      */
-    const data: RKIData = await fetch(
+    const data = await fetch(
         'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=GEN,BEZ,EWZ,KFL,death_rate,cases,deaths,cases_per_100k,cases_per_population,BL,BL_ID,county,last_update,cases7_per_100k,recovered,EWZ_BL,cases7_bl_per_100k&returnGeometry=false&outSR=4326&f=json'
     )
         .then((res) => res.json())
         .then((data) => data.features)
 
-    console.log(data)
+    const _data = await Promise.all(
+        data.map(async (el) =>
+            fetch(
+                `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
+                    el.attributes.GEN
+                )}.json?access_token=pk.eyJ1IjoiemVla3JleSIsImEiOiJja2gwaHViYXQxZHo1MnlyMWdwbjZ3aHIxIn0.iBfBScdw9fEpd_-7-MhtEA&cachebuster=1604503361294&autocomplete=false&country=de&types=place&limit=1`
+            )
+                .then((res) => res.json())
+                .then((res) => ({
+                    ...el,
+                    coords: res.features[0].geometry.coordinates,
+                }))
+                .catch((err) => console.log(err))
+        )
+    )
 
-    // ---
-    // const { params } = ctx as {
-    // params: { city: string }
-    // }
-
-    // const isLandkreis =
-    //     params.city.substring(params.city.length - '(landkreis)'.length) ===
-    //     '(landkreis)'
-
-    // const city = encodeURIComponent(
-    //     isLandkreis
-    //         ? params.city?.slice(0, params.city.length - ' (landkreis)'.length)
-    //         : params.city
-    // ).toUpperCase()
-
-    // const url = `https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=GEN%20%3D%20'${city}'${
-    //     isLandkreis ? `%20AND%20BEZ%20%3D%20'LANDKREIS'` : ''
-    // }&outFields=GEN,BEZ,death_rate,cases,deaths,cases_per_100k,cases_per_population,BL,BL_ID,county,last_update,cases7_per_100k,recovered,EWZ_BL,cases7_bl_per_100k&returnGeometry=false&outSR=4326&f=json`
-
-    // const data: RKIData = await fetch(url)
-    //     .then((res) => res.json())
-    //     .then(({ features }) => {
-    //         console.log(features)
-    //         return features[0].attributes
-    //     })
-
-    return { props: { data } }
+    return { props: { _data } }
 }
 
 const Grid = styled.div`

@@ -1,90 +1,15 @@
 import React from 'react'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 import { GetStaticPaths, GetStaticProps } from 'next'
-// import GithubCorner from 'react-github-corner'
-import type { RKIData } from '../types/types'
-import { tidyUpName, determineInfectionLevel } from '../lib/util'
+import { tidyUpName, determineInfectionLevel, THRESHOLD } from '../lib/util'
 import { Map } from '../components/Map'
+import { Truck, GitHub, Twitter } from 'react-feather'
 
-const Container = styled.div<{ inzidenz: number }>`
-    width: 100vw;
-    min-height: 100vh;
-    height: 100%;
-    background: ${({ inzidenz }) =>
-        inzidenz < 20
-            ? 'linear-gradient(90deg, #DCE35B 0%, #45B649 100%)'
-            : inzidenz < 50
-            ? 'linear-gradient(90deg, #F09819 0%, #EDDE5D 100%)'
-            : 'linear-gradient(90deg, #D31027 0%, #EA384D 100%)'};
-
-    h1 {
-        font-size: 4rem;
-        color: white;
-        text-align: center;
-        padding-top: 10%;
-        margin: 0;
-        text-transform: uppercase;
-        font-family: 'Open Sans';
-        font-style: normal;
-        font-weight: 700;
-    }
-
-    small {
-        display: block;
-        text-align: center;
-        color: white;
-    }
-`
+import type { RKIData } from '../types/types'
 
 const Wrapper = styled.div`
     text-align: center;
-`
-
-const blobKeyframes = keyframes`
-    0% {
-              border-radius:  60% 40% 30% 70% / 60% 30% 70% 40%;
-              background: white;
-      } 
-      
-      50% {
-              border-radius:  30% 60% 70% 40% / 50% 60% 30% 60%;
-              background: white;
-      }
-    
-      100% {
-          border-radius:  60% 40% 30% 70% / 60% 30% 70% 40%;
-          background: white;
-      } 
-  `
-
-const Wave = styled.div`
-    width: 100vw;
-    margin-top: -12%;
-`
-
-const Stage = styled.main`
-    display: flex;
-    place-content: center;
-    padding-top: 10%;
-    position: relative;
-`
-
-const Button = styled.button`
-    padding: 1.4rem 6.5rem;
-    border: 2px solid #ffffff;
-    box-sizing: border-box;
-    border-radius: 8px;
-    color: white;
-    background: none;
-    text-transform: uppercase;
-    font-family: 'Open Sans';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 1.5rem;
-    cursor: pointer;
-    &:focus {
-        outline: none;
-    }
+    padding: 1rem;
 `
 
 const Circle = styled.div`
@@ -158,7 +83,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
     return {
         paths: cities,
-        fallback: false, // See the "fallback" section below
+        fallback: false,
     }
 }
 
@@ -181,9 +106,15 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
         isLandkreis ? `%20AND%20BEZ%20%3D%20'LANDKREIS'` : ''
     }&outFields=GEN,BEZ,death_rate,cases,deaths,cases_per_100k,cases_per_population,BL,BL_ID,county,last_update,cases7_per_100k,recovered,EWZ_BL,cases7_bl_per_100k&returnGeometry=false&outSR=4326&f=json`
 
+    const coords: [number, number] = await fetch(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${city}.json?access_token=pk.eyJ1IjoiemVla3JleSIsImEiOiJja2gwaHViYXQxZHo1MnlyMWdwbjZ3aHIxIn0.iBfBScdw9fEpd_-7-MhtEA&cachebuster=1604503361294&autocomplete=false&country=de&types=place&limit=1`
+    )
+        .then((res) => res.json())
+        .then((res) => res.features[0].geometry.coordinates)
+
     const data: RKIData = await fetch(url)
         .then((res) => res.json())
-        .then(({ features }) => features[0].attributes)
+        .then((data) => ({ ...data.features[0].attributes, coords: coords }))
 
     return { props: { data } }
 }
@@ -193,6 +124,65 @@ const DateComponent = styled.div`
     color: lightgray;
 `
 
+const Links = styled.div`
+    margin: 2rem 0;
+
+    & > a {
+        margin: 0 1rem;
+        color: lightgray;
+    }
+`
+
+const Footer = styled.footer`
+    text-align: center;
+    color: lightgray;
+    font-size: 0.8rem;
+`
+
+const Why = styled.div`
+    font-size: 0.9rem;
+    margin-top: 4rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+
+    @media (min-width: 576px) {
+        width: 80%;
+        margin-top: 6rem;
+    }
+
+    @media (min-width: 992px) {
+        width: 65%;
+    }
+`
+
+const MapContainer = styled.div`
+    width: calc(100%-1rem);
+    padding: 1rem;
+    @media (min-width: 576px) {
+        padding: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        padding: 2rem;
+    }
+
+    @media (min-width: 992px) {
+        padding: 2.5rem;
+    }
+
+    @media (min-width: 1200px) {
+        padding: 3rem;
+    }
+`
+
+// const ThresholdItem = styled.span`
+//     margin-right: 0.8rem;
+//     &:last-child {
+//         margin-right: 0;
+//     }
+// `
+
 const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
     const {
         // cases,
@@ -201,49 +191,43 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
         cases7_per_100k,
         // cases7_bl_per_100k,
         last_update,
+        coords,
     } = data
 
     return (
         <>
-            {/* <GithubCorner
-                href="https://github.com/zeekrey/just-covid"
-                octoColor="#c42a3c"
-                bannerColor="white"
-            /> */}
-            <div
-                style={{
-                    width: 'calc(100%-1rem)',
-                    padding: '1rem',
-                }}
-            >
-                <Map />
-            </div>
+            <MapContainer>
+                <Map coords={coords} />
+            </MapContainer>
             <Indicator emoji={determineInfectionLevel(cases7_per_100k).emoji} />
             <Wrapper>
-                <h1>{tidyUpName(data.GEN, data.BEZ)}</h1>
-                <h2>{data.cases7_per_100k.toFixed(2)}</h2>
-                <div>7-Tage-Inzidenz</div>
-                <DateComponent>Vom {last_update}</DateComponent>
-                <div>
+                <h2>{tidyUpName(data.GEN, data.BEZ)}</h2>
+                <h1>{data.cases7_per_100k.toFixed(2)}</h1>
+                <DateComponent>7-Tage-Inzidenz</DateComponent>
+                <Why>
                     Für alle die, die sich weniger 📈 und mehr 🥳 zur
                     Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌
-                </div>
-                <div>
+                    {/* <br />
+                    <p>
+                        {THRESHOLD.map((el) => (
+                            <ThresholdItem>
+                                {el.from} → {el.to} = {el.emoji}
+                            </ThresholdItem>
+                        ))}
+                    </p> */}
+                </Why>
+                <Links>
                     <a href="https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0">
-                        ℹ️
+                        <Truck />
                     </a>
-                    <a href="https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0">
-                        🦉
+                    <a href="https://twitter.com/zeekrey_">
+                        <Twitter />
                     </a>
-                    <a href="https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0">
-                        😽
+                    <a href="https://github.com/zeekrey/just-covid">
+                        <GitHub />
                     </a>
-                </div>
-                <div>
-                    <div>Twitter</div>
-                    <div>Github</div>
-                </div>
-                <div>Impressum // Christian Krey, covid@krey.io</div>
+                </Links>
+                <Footer>Daten vom {last_update}</Footer>
             </Wrapper>
         </>
     )

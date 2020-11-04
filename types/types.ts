@@ -14,4 +14,5 @@ export type RKIData = {
     recovered: number | null
     EWZ_BL: number
     cases7_bl_per_100k: number
+    coords: [number, number]
 }
