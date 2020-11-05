@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { tidyUpName, determineInfectionLevel, THRESHOLD } from '../lib/util'
+import { tidyUpName, determineInfectionLevel } from '../lib/util'
 import { Map } from '../components/Map'
 import { Truck, GitHub, Twitter } from 'react-feather'
 import { NextSeo } from 'next-seo'
+import { cities } from '../data/citycoordinates'
 
 import type { RKIData } from '../types/types'
 
@@ -103,19 +104,21 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
             : params.city
     ).toUpperCase()
 
-    const url = `https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=GEN%20%3D%20'${city}'${
-        isLandkreis ? `%20AND%20BEZ%20%3D%20'LANDKREIS'` : ''
-    }&outFields=GEN,BEZ,death_rate,cases,deaths,cases_per_100k,cases_per_population,BL,BL_ID,county,last_update,cases7_per_100k,recovered,EWZ_BL,cases7_bl_per_100k&returnGeometry=false&outSR=4326&f=json`
-
-    const coords: [number, number] = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${city}.json?access_token=pk.eyJ1IjoiemVla3JleSIsImEiOiJja2gwaHViYXQxZHo1MnlyMWdwbjZ3aHIxIn0.iBfBScdw9fEpd_-7-MhtEA&cachebuster=1604503361294&autocomplete=false&country=de&types=place&limit=1`
+    const data: RKIData = await fetch(
+        `https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=GEN%20%3D%20'${city}'${
+            isLandkreis ? `%20AND%20BEZ%20%3D%20'LANDKREIS'` : ''
+        }&outFields=GEN,BEZ,death_rate,cases,deaths,cases_per_100k,cases_per_population,BL,BL_ID,county,last_update,cases7_per_100k,recovered,EWZ_BL,cases7_bl_per_100k&returnGeometry=false&outSR=4326&f=json`
     )
         .then((res) => res.json())
-        .then((res) => res.features[0].geometry.coordinates)
-
-    const data: RKIData = await fetch(url)
-        .then((res) => res.json())
-        .then((data) => ({ ...data.features[0].attributes, coords: coords }))
+        .then(({ features }) => {
+            const coords = cities.filter(
+                ({ name }) => name === features[0].attributes.GEN
+            )
+            return {
+                ...features[0].attributes,
+                coords: [coords[0].coords.lng, coords[0].coords.lat],
+            }
+        })
 
     return { props: { data } }
 }
@@ -177,13 +180,6 @@ const MapContainer = styled.div`
     }
 `
 
-// const ThresholdItem = styled.span`
-//     margin-right: 0.8rem;
-//     &:last-child {
-//         margin-right: 0;
-//     }
-// `
-
 const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
     const {
         // cases,
@@ -216,14 +212,6 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                 <Why>
                     Für alle die, die sich weniger 📈 und mehr 🥳 zur
                     Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌
-                    {/* <br />
-                    <p>
-                        {THRESHOLD.map((el) => (
-                            <ThresholdItem>
-                                {el.from} → {el.to} = {el.emoji}
-                            </ThresholdItem>
-                        ))}
-                    </p> */}
                 </Why>
                 <Links>
                     <a

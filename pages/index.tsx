@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { GetStaticProps } from 'next'
 import Link from 'next/link'
-import { tidyUpName, determineInfectionLevel } from '../lib/util'
+import { tidyUpName, determineInfectionLevel, THRESHOLD } from '../lib/util'
 import { cities } from '../data/citycoordinates'
 import { Truck, GitHub, Twitter } from 'react-feather'
 import { MapThumbnail } from '../components/MapThumbnail'
@@ -197,6 +197,13 @@ const Label = styled.label`
     display: block;
 `
 
+const ThresholdItem = styled.span`
+    margin-right: 0.8rem;
+    &:last-child {
+        margin-right: 0;
+    }
+`
+
 const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
     const [selectedCity, setSelectedCity] = React.useState('')
     const [cities, setCities] = React.useState(data)
@@ -222,14 +229,14 @@ const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
                 <Why>
                     Für alle die, die sich weniger 📈 und mehr 🐵 zur
                     Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌
-                    {/* <br />
+                    <br />
                     <p>
                         {THRESHOLD.map((el) => (
-                            <ThresholdItem>
+                            <ThresholdItem key={el.emoji}>
                                 {el.from} → {el.to} = {el.emoji}
                             </ThresholdItem>
                         ))}
-                    </p> */}
+                    </p>
                 </Why>
                 <Label htmlFor="select">Wähle eine Stadt aus: </Label>
                 <Select
