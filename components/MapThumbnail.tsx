@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import mbxStatic from '@mapbox/mapbox-sdk/services/static'
 
 const Wrapper = styled.div`
+    position: relative;
     border-radius: 1rem;
     overflow: hidden;
     & img {
@@ -43,7 +44,7 @@ const getMapboxStaticImage = ({
     return request.url()
 }
 
-const Map: React.FunctionComponent<{ coords: [number, number] }> = ({
+const MapThumbnail: React.FunctionComponent<{ coords: [number, number] }> = ({
     coords,
 }) => {
     return (
@@ -55,49 +56,50 @@ const Map: React.FunctionComponent<{ coords: [number, number] }> = ({
                     media="(max-width: 576px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
-                        width: 400,
-                        height: 350,
+                        width: 300,
+                        height: 300,
                     })}
                 />
                 {/* Extra large devices (large desktops, 1200px and up) */}
-                <source
+                {/* <source
                     media="(min-width: 1200px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
                         width: 1280,
                         height: 380,
                     })}
-                />
+                /> */}
                 {/* Large devices (desktops, 992px and up) */}
-                <source
+                {/* <source
                     media="(min-width: 992px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
                         width: 400,
                         height: 150,
                     })}
-                />
+                /> */}
                 {/* Medium devices (tablets, 768px and up) */}
-                <source
+                {/* <source
                     media="(min-width: 577px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
                         width: 400,
                         height: 225,
                     })}
-                />
+                /> */}
                 {/* default */}
                 <img
                     src={getMapboxStaticImage({
                         coords: coords,
-                        width: 1280,
-                        height: 432,
+                        width: 400,
+                        height: 400,
                     })}
                     alt="City Map"
+                    loading="lazy"
                 />
             </picture>
         </Wrapper>
     )
 }
 
-export { Map }
+export { MapThumbnail }
