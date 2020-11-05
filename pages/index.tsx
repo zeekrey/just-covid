@@ -183,6 +183,7 @@ const Select = styled.select`
     margin-top: 1rem;
     border: 1px solid lightgray;
     border-radius: 0.2rem;
+    background-color: white;
 
     &:hover {
         cursor: pointer;
@@ -206,7 +207,6 @@ const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
                 data.filter((el) => tidyUpName(el.GEN, el.BEZ) === selectedCity)
             )
         // console.log(tidyUpName(el.GEN, el.BEZ))
-        console.log(selectedCity)
     }, [selectedCity])
 
     return (
