@@ -2,16 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { GetStaticProps } from 'next'
 import Link from 'next/link'
-import type { RKIData } from '../types/types'
 import { tidyUpName, determineInfectionLevel } from '../lib/util'
 import { cities } from '../data/citycoordinates'
 import { Truck, GitHub, Twitter } from 'react-feather'
 import { MapThumbnail } from '../components/MapThumbnail'
 
-const Title = styled.h1`
-    color: red;
-    font-size: 50px;
-`
+import type { RKIData } from '../types/types'
 
 export const getStaticProps: GetStaticProps = async () => {
     /**
@@ -46,19 +42,19 @@ const Grid = styled.div`
     // Medium devices (tablets, 768px and up)
     @media (min-width: 768px) {
         grid-template-columns: 1fr 1fr 1fr;
-        gap: 10px 10px;
+        gap: 14px 14px;
     }
 
     // Large devices (desktops, 992px and up)
     @media (min-width: 992px) {
         grid-template-columns: 1fr 1fr 1fr 1fr;
-        gap: 10px 10px;
+        gap: 20px 20px;
     }
 
     // Extra large devices (large desktops, 1200px and up)
     @media (min-width: 1200px) {
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-        gap: 10px 10px;
+        gap: 25px 25px;
     }
 `
 
@@ -76,8 +72,8 @@ const CityContainer = styled.div`
 
 const Circle = styled.div`
     border-radius: 99rem;
-    width: 6.5rem;
-    height: 6.5rem;
+    width: 4rem;
+    height: 4rem;
     background: #ffffff91;
     box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
         0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
@@ -91,7 +87,15 @@ const Circle = styled.div`
     border: 3px solid white;
 
     & > div {
-        font-size: 2.1rem;
+        font-size: 1.8rem;
+    }
+
+    @media (min-width: 768px) {
+        & > div {
+            font-size: 2rem;
+        }
+        width: 4.6rem;
+        height: 4.6rem;
     }
 `
 

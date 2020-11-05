@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import mbxStatic from '@mapbox/mapbox-sdk/services/static'
 
 const Wrapper = styled.div`
+    position: relative;
     border-radius: 1rem;
     overflow: hidden;
     & img {
@@ -43,12 +44,30 @@ const getMapboxStaticImage = ({
     return request.url()
 }
 
+const Placeholder = styled.div`
+    @media (max-width: 576px) {
+        padding-top: ${() => 100.0 / (400 / 350)}%;
+    }
+
+    @media (min-width: 1200px) {
+        padding-top: ${() => 100.0 / (1280 / 380)}%;
+    }
+
+    @media (min-width: 992px) {
+        padding-top: ${() => 100.0 / (400 / 150)}%;
+    }
+
+    @media (min-width: 577px) {
+        padding-top: ${() => 100.0 / (400 / 225)}%;
+    }
+`
+
 const Map: React.FunctionComponent<{ coords: [number, number] }> = ({
     coords,
 }) => {
     return (
         <Wrapper>
-            <div style={{ paddingTop: `${100.0 / 1}%` }}></div>
+            <Placeholder />
             <picture>
                 {/* Small devices (landscape phones, 576px and up) */}
                 <source
