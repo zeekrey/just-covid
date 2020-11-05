@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { normalize } from 'styled-normalize'
+import Head from 'next/head'
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}
@@ -64,6 +65,9 @@ const theme = {
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <>
+            <Head>
+                <html lang="de" />
+            </Head>
             <GlobalStyle />
             <ThemeProvider theme={theme}>
                 <Component {...pageProps} />

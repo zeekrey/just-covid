@@ -4,6 +4,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { tidyUpName, determineInfectionLevel, THRESHOLD } from '../lib/util'
 import { Map } from '../components/Map'
 import { Truck, GitHub, Twitter } from 'react-feather'
+import { NextSeo } from 'next-seo'
 
 import type { RKIData } from '../types/types'
 
@@ -121,7 +122,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
 const DateComponent = styled.div`
     margin: 1rem 0;
-    color: lightgray;
+    color: #757575;
 `
 
 const Links = styled.div`
@@ -129,13 +130,13 @@ const Links = styled.div`
 
     & > a {
         margin: 0 1rem;
-        color: lightgray;
+        color: #757575;
     }
 `
 
 const Footer = styled.footer`
     text-align: center;
-    color: lightgray;
+    color: #757575;
     font-size: 0.8rem;
 `
 
@@ -196,6 +197,14 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
 
     return (
         <>
+            <NextSeo
+                title="Just Covid"
+                description="Für alle die, die sich weniger 📈 und mehr 🥳 zur
+                Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌"
+                canonical={`https://covid.krey.io/${encodeURIComponent(
+                    tidyUpName(data.GEN, data.BEZ).toLowerCase()
+                )}`}
+            />
             <MapContainer>
                 <Map coords={coords} />
             </MapContainer>
@@ -217,13 +226,28 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                     </p> */}
                 </Why>
                 <Links>
-                    <a href="https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0">
+                    <a
+                        href="https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0"
+                        aria-label="Quelle"
+                        target="_blank"
+                        rel="noopener"
+                    >
                         <Truck />
                     </a>
-                    <a href="https://twitter.com/zeekrey_">
+                    <a
+                        href="https://twitter.com/zeekrey_"
+                        aria-label="Twitter"
+                        target="_blank"
+                        rel="noopener"
+                    >
                         <Twitter />
                     </a>
-                    <a href="https://github.com/zeekrey/just-covid">
+                    <a
+                        href="https://github.com/zeekrey/just-covid"
+                        aria-label="Github"
+                        target="_blank"
+                        rel="noopener"
+                    >
                         <GitHub />
                     </a>
                 </Links>

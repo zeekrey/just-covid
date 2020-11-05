@@ -6,6 +6,7 @@ import { tidyUpName, determineInfectionLevel } from '../lib/util'
 import { cities } from '../data/citycoordinates'
 import { Truck, GitHub, Twitter } from 'react-feather'
 import { MapThumbnail } from '../components/MapThumbnail'
+import { NextSeo } from 'next-seo'
 
 import type { RKIData } from '../types/types'
 
@@ -149,7 +150,7 @@ const Links = styled.div`
 
     & > a {
         margin: 0 1rem;
-        color: lightgray;
+        color: #757575;
     }
 `
 
@@ -191,7 +192,7 @@ const Select = styled.select`
 const Label = styled.label`
     margin-top: 1rem;
     font-size: 0.8rem;
-    color: lightgray;
+    color: #757575;
     display: block;
 `
 
@@ -210,6 +211,12 @@ const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
 
     return (
         <>
+            <NextSeo
+                title="Just Covid"
+                description="Für alle die, die sich weniger 📈 und mehr 🥳 zur
+                Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌"
+                canonical="https://covid.krey.io/"
+            />
             <Wrapper>
                 <h1>Just C😲vid</h1>
                 <Why>
@@ -247,13 +254,28 @@ const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
             </Grid>
 
             <Links>
-                <a href="https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0">
+                <a
+                    href="https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/ef4b445a53c1406892257fe63129a8ea_0"
+                    aria-label="Quelle"
+                    target="_blank"
+                    rel="noopener"
+                >
                     <Truck />
                 </a>
-                <a href="https://twitter.com/zeekrey_">
+                <a
+                    href="https://twitter.com/zeekrey_"
+                    aria-label="Twitter"
+                    target="_blank"
+                    rel="noopener"
+                >
                     <Twitter />
                 </a>
-                <a href="https://github.com/zeekrey/just-covid">
+                <a
+                    href="https://github.com/zeekrey/just-covid"
+                    aria-label="Github"
+                    target="_blank"
+                    rel="noopener"
+                >
                     <GitHub />
                 </a>
             </Links>
