@@ -49,7 +49,19 @@ const MapThumbnail: React.FunctionComponent<{ coords: [number, number] }> = ({
 }) => {
     return (
         <Wrapper>
-            <div style={{ paddingTop: `${100.0 / 1}%` }}></div>
+            <div
+                style={{
+                    paddingTop: `${100.0 / 1}%`,
+                    backgroundColor: 'lightgray',
+                    // backgroundImage: `url(${getMapboxStaticImage({
+                    //     coords: coords,
+                    //     width: 15,
+                    //     height: 15,
+                    // })})`,
+                    // backgroundSize: 'cover',
+                    // filter: 'blur(3px)',
+                }}
+            ></div>
             <picture>
                 {/* Small devices (landscape phones, 576px and up) */}
                 <source
@@ -61,32 +73,32 @@ const MapThumbnail: React.FunctionComponent<{ coords: [number, number] }> = ({
                     })}
                 />
                 {/* Extra large devices (large desktops, 1200px and up) */}
-                {/* <source
+                <source
                     media="(min-width: 1200px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
-                        width: 1280,
-                        height: 380,
+                        width: 400,
+                        height: 400,
                     })}
-                /> */}
+                />
                 {/* Large devices (desktops, 992px and up) */}
-                {/* <source
+                <source
                     media="(min-width: 992px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
-                        width: 400,
-                        height: 150,
+                        width: 350,
+                        height: 350,
                     })}
-                /> */}
+                />
                 {/* Medium devices (tablets, 768px and up) */}
-                {/* <source
+                <source
                     media="(min-width: 577px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
-                        width: 400,
-                        height: 225,
+                        width: 300,
+                        height: 300,
                     })}
-                /> */}
+                />
                 {/* default */}
                 <img
                     src={getMapboxStaticImage({

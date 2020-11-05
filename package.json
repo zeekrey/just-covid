@@ -7,13 +7,9 @@
     "start": "next start"
   },
   "dependencies": {
-    "@juggle/resize-observer": "^3.2.0",
     "@mapbox/mapbox-sdk": "^0.11.0",
-    "@types/d3": "^6.0.0",
-    "@types/recharts": "^1.8.16",
     "@visx/axis": "^1.1.0",
     "@vx/axis": "^0.0.199",
-    "d3": "^6.2.0",
     "date-fns": "^2.16.1",
     "next": "10.0.1",
     "react": "^17.0.1",
@@ -21,7 +17,6 @@
     "react-feather": "^2.0.8",
     "react-github-corner": "^2.5.0",
     "react-vis": "^1.11.7",
-    "recharts": "^1.8.5",
     "styled-components": "^5.2.1",
     "styled-normalize": "^8.0.7"
   },

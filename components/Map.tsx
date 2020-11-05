@@ -45,6 +45,8 @@ const getMapboxStaticImage = ({
 }
 
 const Placeholder = styled.div`
+    background-color: lightgray;
+
     @media (max-width: 576px) {
         padding-top: ${() => 100.0 / (400 / 350)}%;
     }
@@ -53,11 +55,11 @@ const Placeholder = styled.div`
         padding-top: ${() => 100.0 / (1280 / 380)}%;
     }
 
-    @media (min-width: 992px) {
+    @media (min-width: 992px) and (max-width: 1199px) {
         padding-top: ${() => 100.0 / (400 / 150)}%;
     }
 
-    @media (min-width: 577px) {
+    @media (min-width: 577px) and (max-width: 991px) {
         padding-top: ${() => 100.0 / (400 / 225)}%;
     }
 `
@@ -92,8 +94,8 @@ const Map: React.FunctionComponent<{ coords: [number, number] }> = ({
                     media="(min-width: 992px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
-                        width: 400,
-                        height: 150,
+                        width: 720,
+                        height: 270,
                     })}
                 />
                 {/* Medium devices (tablets, 768px and up) */}
@@ -101,8 +103,8 @@ const Map: React.FunctionComponent<{ coords: [number, number] }> = ({
                     media="(min-width: 577px)"
                     srcSet={getMapboxStaticImage({
                         coords: coords,
-                        width: 400,
-                        height: 225,
+                        width: 560,
+                        height: 315,
                     })}
                 />
                 {/* default */}

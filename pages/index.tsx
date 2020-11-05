@@ -19,7 +19,7 @@ export const getStaticProps: GetStaticProps = async () => {
     )
         .then((res) => res.json())
         .then(({ features }) => {
-            return features.map((city) => {
+            return features.map((city: { attributes: { GEN: string } }) => {
                 const coords = cities.filter(
                     ({ name }) => name === city.attributes.GEN
                 )
@@ -43,6 +43,7 @@ const Grid = styled.div`
     @media (min-width: 768px) {
         grid-template-columns: 1fr 1fr 1fr;
         gap: 14px 14px;
+        padding: 2rem;
     }
 
     // Large devices (desktops, 992px and up)
@@ -64,10 +65,25 @@ const InnerWrapper = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: center;
+
+    & span {
+        margin-top: 1rem;
+        color: black;
+        font-size: 1.4rem;
+        font-weight: 600;
+        text-align: center;
+        word-break: break-word;
+    }
 `
 
 const CityContainer = styled.div`
     position: relative;
+    border-radius: 1rem;
+    &:hover {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.04),
+            0px 0px 2px rgba(0, 0, 0, 0.06), 0px 0px 1px rgba(0, 0, 0, 0.04);
+    }
 `
 
 const Circle = styled.div`
@@ -109,6 +125,7 @@ const City = ({ city }: { city: RKIData }) => {
             <a>
                 <CityContainer>
                     <InnerWrapper>
+                        <span>{tidyUpName(city.GEN, city.BEZ)}</span>
                         <Circle>
                             <div>
                                 {
@@ -194,9 +211,9 @@ const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
     return (
         <>
             <Wrapper>
-                <h1>Just Covid</h1>
+                <h1>Just C😲vid</h1>
                 <Why>
-                    Für alle die, die sich weniger 📈 und mehr 🥳 zur
+                    Für alle die, die sich weniger 📈 und mehr 🐵 zur
                     Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌
                     {/* <br />
                     <p>
