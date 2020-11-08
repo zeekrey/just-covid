@@ -204,9 +204,21 @@ const ThresholdItem = styled.span`
     }
 `
 
+const sortAlphabetically = (list: RKIData[]): RKIData[] => {
+    return list.sort((a, b) => {
+        if (a.GEN < b.GEN) {
+            return -1
+        }
+        if (a.GEN > b.GEN) {
+            return 1
+        }
+        return 0
+    })
+}
+
 const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
     const [selectedCity, setSelectedCity] = React.useState('')
-    const [cities, setCities] = React.useState(data)
+    const [cities, setCities] = React.useState(sortAlphabetically(data))
 
     React.useEffect(() => {
         if (selectedCity.length)

@@ -56,18 +56,6 @@ const Indicator: React.FunctionComponent<{ emoji: string }> = ({ emoji }) => {
     )
 }
 
-// const sortAlphabetically = (list: { name: string }[]): { name: string }[] => {
-//     return list.sort((a, b) => {
-//         if (a.name < b.name) {
-//             return -1
-//         }
-//         if (a.name > b.name) {
-//             return 1
-//         }
-//         return 0
-//     })
-// }
-
 export const getStaticPaths: GetStaticPaths = async () => {
     const cities = await fetch(
         'https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=GEN,BEZ,EWZ,KFL,death_rate,cases,deaths,cases_per_100k,cases_per_population,BL,BL_ID,county,last_update,cases7_per_100k,recovered,EWZ_BL,cases7_bl_per_100k&returnGeometry=false&outSR=4326&f=json'
