@@ -7,6 +7,12 @@ import { Truck, GitHub, Twitter } from 'react-feather'
 import { NextSeo } from 'next-seo'
 import { cities } from '../data/citycoordinates'
 
+/**
+ * Just for testing purpose.
+ */
+import { Thumbnail } from '../components/Thumbnail'
+import { imageFromComponent } from '../lib/imageFromComponent'
+
 import type { RKIData } from '../types/types'
 
 const Wrapper = styled.div`
@@ -120,6 +126,25 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
             }
         })
 
+    /**
+     * Create the preview image
+     */
+
+    const previewImageSize = { width: 1200, height: 1200 }
+    const pathToStoreFile = `./public/images/${encodeURIComponent(
+        tidyUpName(data.GEN, data.BEZ).toLowerCase()
+    )}.png`
+
+    await imageFromComponent(
+        <Thumbnail
+            coords={data.coords}
+            inzidenz={data.cases7_per_100k}
+            size={previewImageSize}
+        />,
+        previewImageSize,
+        pathToStoreFile
+    )
+
     return { props: { data } }
 }
 
@@ -200,6 +225,25 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                 canonical={`https://covid.krey.io/${encodeURIComponent(
                     tidyUpName(data.GEN, data.BEZ).toLowerCase()
                 )}`}
+                openGraph={{
+                    url: `https://covid.krey.io/${encodeURIComponent(
+                        tidyUpName(data.GEN, data.BEZ).toLowerCase()
+                    )}`,
+                    title: `Just Covid - ${tidyUpName(data.GEN, data.BEZ)}`,
+                    description:
+                        'Für alle die, die sich weniger 📈 und mehr 🥳 zur Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌',
+                    images: [
+                        {
+                            url: `/images/${encodeURIComponent(
+                                tidyUpName(data.GEN, data.BEZ).toLowerCase()
+                            )}.png`,
+                            width: 1200,
+                            height: 1200,
+                            alt: 'Just covid image',
+                        },
+                    ],
+                    site_name: `Just Covid - ${tidyUpName(data.GEN, data.BEZ)}`,
+                }}
             />
             <MapContainer>
                 <Map coords={coords} />
@@ -241,6 +285,13 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                 </Links>
                 <Footer>Daten vom {last_update}</Footer>
             </Wrapper>
+            {/* Just for testing purpose. 
+            <Thumbnail
+                coords={coords}
+                inzidenz={cases7_per_100k}
+                size={{ width: 1200, height: 1200 }}
+            />
+            */}
         </>
     )
 }
