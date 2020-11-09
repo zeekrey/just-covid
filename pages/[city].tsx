@@ -6,10 +6,6 @@ import { Map } from '../components/Map'
 import { Truck, GitHub, Twitter } from 'react-feather'
 import { NextSeo } from 'next-seo'
 import { cities } from '../data/citycoordinates'
-
-/**
- * Just for testing purpose.
- */
 import { Thumbnail } from '../components/Thumbnail'
 import { imageFromComponent } from '../lib/imageFromComponent'
 
@@ -222,7 +218,7 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                         'Für alle die, die sich weniger 📈 und mehr 🥳 zur Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌',
                     images: [
                         {
-                            url: `/images/${encodeURIComponent(
+                            url: `https://covid.krey.io/images/${encodeURIComponent(
                                 tidyUpName(data.GEN, data.BEZ).toLowerCase()
                             )}.png`,
                             width: 1200,
