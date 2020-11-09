@@ -269,13 +269,12 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                 </Links>
                 <Footer>Daten vom {last_update}</Footer>
             </Wrapper>
-            {/* Just for testing purpose. 
+            {/* Just for testing purpose.  */}
             <Thumbnail
                 coords={coords}
                 inzidenz={cases7_per_100k}
                 size={{ width: 1200, height: 1200 }}
             />
-            */}
         </>
     )
 }
