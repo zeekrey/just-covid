@@ -209,6 +209,11 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                 canonical={`https://covid.krey.io/${encodeURIComponent(
                     tidyUpName(data.GEN, data.BEZ).toLowerCase()
                 )}`}
+                twitter={{
+                    handle: '@zeekrey_',
+                    site: '@zeekrey_',
+                    cardType: 'summary_large_image',
+                }}
                 openGraph={{
                     url: `https://covid.krey.io/${encodeURIComponent(
                         tidyUpName(data.GEN, data.BEZ).toLowerCase()
