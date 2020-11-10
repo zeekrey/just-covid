@@ -46,7 +46,7 @@ const Thumbnail: React.FunctionComponent<{
                 }}
             >
                 <img
-                    src={determineInfectionLevel(inzidenz).fallbackImage}
+                    src={determineInfectionLevel(inzidenz).fallbackImageDataUri}
                     alt={determineInfectionLevel(inzidenz).emoji}
                     width="125px"
                 />
