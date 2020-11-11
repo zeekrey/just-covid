@@ -279,7 +279,7 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
             />
             <MapContainer>
                 <Link href="/" passHref>
-                    <SeeMoreButton>
+                    <SeeMoreButton aria-label="Andere Stadt">
                         <ArrowLeftCircle size={18} />
                         <div>Andere Stadt</div>
                     </SeeMoreButton>
