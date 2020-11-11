@@ -9,9 +9,11 @@ const getMapboxStaticImageUrl = ({
     height: number
     coords: [number, number]
 }): string => {
+    if (typeof process.env.NEXT_PUBLIC_MAPBOX === 'undefined')
+        throw Error('Please provide a Mapbox token within a .env file.')
+
     const staticService = mbxStatic({
-        accessToken:
-            'pk.eyJ1IjoiemVla3JleSIsImEiOiJja2gwaHViYXQxZHo1MnlyMWdwbjZ3aHIxIn0.iBfBScdw9fEpd_-7-MhtEA',
+        accessToken: process.env.NEXT_PUBLIC_MAPBOX || '',
     })
 
     const request = staticService.getStaticImage({
