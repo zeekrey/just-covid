@@ -1,9 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import { GetStaticPaths, GetStaticProps } from 'next'
+import Link from 'next/link'
 import { tidyUpName, determineInfectionLevel } from '../lib/util'
 import { Map } from '../components/Map'
-import { Truck, GitHub, Twitter } from 'react-feather'
+import { Truck, GitHub, Twitter, ArrowLeftCircle } from 'react-feather'
 import { NextSeo } from 'next-seo'
 import { cities } from '../data/citycoordinates'
 import { Thumbnail } from '../components/Thumbnail'
@@ -189,6 +190,48 @@ const MapContainer = styled.div`
     }
 `
 
+const SeeMoreButton = styled.a`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 1;
+    font-size: 0.8rem;
+    padding: 1rem 1.4rem;
+    background-color: white;
+    font-weight: 800;
+    color: #757575;
+    text-decoration: none;
+    border-radius: 0.4rem;
+    box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
+        0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
+        0px 0px 1px rgba(0, 0, 0, 0.04);
+
+    top: 2rem;
+    left: 2rem;
+
+    & > div {
+        display: none;
+        @media (min-width: 576px) {
+            display: inherit;
+        }
+    }
+
+    @media (min-width: 576px) {
+        top: 3rem;
+        left: 3rem;
+
+        & > svg {
+            margin-right: 0.8rem;
+        }
+    }
+
+    @media (min-width: 992px) {
+        top: 4rem;
+        left: 4rem;
+    }
+`
+
 const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
     const {
         // cases,
@@ -235,6 +278,12 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                 }}
             />
             <MapContainer>
+                <Link href="/" passHref>
+                    <SeeMoreButton>
+                        <ArrowLeftCircle size={18} />
+                        <div>Andere Stadt</div>
+                    </SeeMoreButton>
+                </Link>
                 <Map coords={coords} />
             </MapContainer>
             <Indicator emoji={determineInfectionLevel(cases7_per_100k).emoji} />
