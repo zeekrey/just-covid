@@ -233,14 +233,14 @@ const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
             <NextSeo
                 title="Just Covid"
                 description="Für alle die, die sich weniger 📈 und mehr 🥳 zur
-                Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌"
+                Beschreibung der aktuellen Lage wünschen. Bleibt gesund. 💌"
                 canonical="https://covid.krey.io/"
             />
             <Wrapper>
                 <h1>Just C😲vid</h1>
                 <Why>
                     Für alle die, die sich weniger 📈 und mehr 🐵 zur
-                    Beschreibung der aktuelle Lage wünschen. Bleibt gesund. 💌
+                    Beschreibung der aktuellen Lage wünschen. Bleibt gesund. 💌
                     <br />
                     <p>
                         {THRESHOLD.map((el) => (
