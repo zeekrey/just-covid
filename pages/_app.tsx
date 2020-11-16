@@ -91,6 +91,11 @@ export default function App({ Component, pageProps }: AppProps) {
                     href="/icons/icon-180x180.png"
                 ></link>
                 <meta name="theme-color" content="#ffffff" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta
+                    name="apple-mobile-web-app-status-bar-style"
+                    content="default"
+                />
             </Head>
             <GlobalStyle />
             <ThemeProvider theme={theme}>

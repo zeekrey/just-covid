@@ -51,6 +51,25 @@ const imageFromComponent = async (
 export { imageFromComponent }
 ```
 
+## Notes 
+
+### How I calculate the Base Reproduction Number
+
+To calculate the Base Reproduction Number (germ.: R-Wert) I use the following formula:
+
+```
+BRN from 02.05.2020
+SUM(Sum_of_Cases(27.04.20 -> 03.05.20))/SUM(Sum_of_Cases(23.04.20-29.04.20))
+
+const today = today //02.05.20
+
+const sum1 = (Date()-5) + (Date()-4) + (Date()-3) + (Date()-2) + (Date()-1) + (Date()) + (Date()+1)
+const sum2 = (Date()-9) + (Date()-8) + (Date()-7) + (Date()-6) + (Date()-5) + (Date()-4) + (Date()-3)
+const res = sum1/sum2
+```
+
+To get historic data I save the daylie data returnd by (source).
+
 ## Contribution
 
 Do what ever you want. ❤
