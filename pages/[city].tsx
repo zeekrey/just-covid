@@ -130,7 +130,11 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
         pathToStoreFile
     )
 
-    return { props: { data } }
+    return {
+        props: { data },
+        // Revalidate the page every 3600seconds => once per hour
+        revalidate: 3600,
+    }
 }
 
 const DateComponent = styled.div`
