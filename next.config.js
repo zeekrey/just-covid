@@ -8,6 +8,8 @@ module.exports = withPWA({
     },
     pwa: {
         dest: 'public',
+        register: false,
+        skipWaiting: false,
         runtimeCaching,
     },
 })

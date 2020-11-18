@@ -1,4 +1,4 @@
-define("./workbox-17357acd.js",['exports'], function (exports) { 'use strict';
+define("./workbox-f4029d86.js",['exports'], function (exports) { 'use strict';
 
     try {
       self['workbox:core:5.1.4'] && _();
@@ -3552,27 +3552,6 @@ define("./workbox-17357acd.js",['exports'], function (exports) { 'use strict';
       https://opensource.org/licenses/MIT.
     */
     /**
-     * Force a service worker to activate immediately, instead of
-     * [waiting](https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#waiting)
-     * for existing clients to close.
-     *
-     * @memberof module:workbox-core
-     */
-
-    function skipWaiting() {
-      // We need to explicitly call `self.skipWaiting()` here because we're
-      // shadowing `skipWaiting` with this local function.
-      self.addEventListener('install', () => self.skipWaiting());
-    }
-
-    /*
-      Copyright 2019 Google LLC
-
-      Use of this source code is governed by an MIT-style
-      license that can be found in the LICENSE file or at
-      https://opensource.org/licenses/MIT.
-    */
-    /**
      * Claim any currently available clients once the service worker
      * becomes active. This is normally used in conjunction with `skipWaiting()`.
      *
@@ -3589,7 +3568,6 @@ define("./workbox-17357acd.js",['exports'], function (exports) { 'use strict';
     exports.StaleWhileRevalidate = StaleWhileRevalidate;
     exports.clientsClaim = clientsClaim;
     exports.registerRoute = registerRoute;
-    exports.skipWaiting = skipWaiting;
 
 });
-//# sourceMappingURL=workbox-17357acd.js.map
+//# sourceMappingURL=workbox-f4029d86.js.map
