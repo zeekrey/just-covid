@@ -9,6 +9,7 @@ import { NextSeo } from 'next-seo'
 import { cities } from '../data/citycoordinates'
 import { Thumbnail } from '../components/Thumbnail'
 import { imageFromComponent } from '../lib/imageFromComponent'
+import { Banner } from '../components/Banner'
 
 import type { RKIData } from '../types/types'
 
@@ -211,7 +212,7 @@ const SeeMoreButton = styled.a`
         0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
         0px 0px 1px rgba(0, 0, 0, 0.04);
 
-    top: 2rem;
+    top: 8rem;
     left: 2rem;
 
     & > div {
@@ -222,7 +223,7 @@ const SeeMoreButton = styled.a`
     }
 
     @media (min-width: 576px) {
-        top: 3rem;
+        top: 8rem;
         left: 3rem;
 
         & > svg {
@@ -231,7 +232,7 @@ const SeeMoreButton = styled.a`
     }
 
     @media (min-width: 992px) {
-        top: 4rem;
+        top: 8rem;
         left: 4rem;
     }
 `
@@ -281,6 +282,7 @@ const City: React.FunctionComponent<{ data: RKIData }> = ({ data }) => {
                     site_name: `Just Covid - ${tidyUpName(data.GEN, data.BEZ)}`,
                 }}
             />
+            <Banner />
             <MapContainer>
                 <Link href="/" passHref>
                     <SeeMoreButton aria-label="Andere Stadt">

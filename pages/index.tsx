@@ -7,6 +7,7 @@ import { cities } from '../data/citycoordinates'
 import { Truck, GitHub, Twitter } from 'react-feather'
 import { MapThumbnail } from '../components/MapThumbnail'
 import { NextSeo } from 'next-seo'
+import { Banner } from '../components/Banner'
 
 import type { RKIData } from '../types/types'
 
@@ -236,6 +237,7 @@ const Home: React.FunctionComponent<{ data: RKIData[] }> = ({ data }) => {
                 Beschreibung der aktuellen Lage wünschen. Bleibt gesund. 💌"
                 canonical="https://covid.krey.io/"
             />
+            <Banner />
             <Wrapper>
                 <h1>Just C😲vid</h1>
                 <Why>
